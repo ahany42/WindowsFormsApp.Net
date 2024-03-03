@@ -61,5 +61,55 @@ namespace WindowsFormsApp
         {
             conn.Dispose();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = "insert into Actors values(:id,:name,:gender)";
+            cmd.Parameters.Add("id", comboBox1.Text);
+            cmd.Parameters.Add("name", textBox1.Text);
+            cmd.Parameters.Add("gender", textBox2.Text);
+            int r = cmd.ExecuteNonQuery();
+            if (r != -1)
+            {
+                comboBox1.Items.Add(comboBox1.Text);
+                MessageBox.Show("New Actor is Added");
+            }
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = "update Actors set ActorName=:name,gender=:gender where ActorId=:id";
+            cmd.Parameters.Add("name", textBox1.Text);
+            cmd.Parameters.Add("gender", textBox2.Text);
+            cmd.Parameters.Add("id", comboBox1.SelectedItem.ToString());
+            int r = cmd.ExecuteNonQuery();
+            if (r != -1)
+            {
+
+                MessageBox.Show("Actor Modified");
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OracleCommand cmd = new OracleCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = "Delete from Actors where ActorId=:id";
+            cmd.Parameters.Add("id", comboBox1.SelectedItem.ToString());
+            int r = cmd.ExecuteNonQuery();
+            if (r != -1)
+            {
+                MessageBox.Show("Actor Deleted");
+                comboBox1.Items.RemoveAt(comboBox1.SelectedIndex);
+                textBox1.Text = " ";
+                textBox2.Text = " ";
+            }
+
+        }
     }
 }
